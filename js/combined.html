@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+     <meta charset="utf-8">
+    <!--Edit the title of the page-->
+   
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+     <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-46758541-1', 'antievictionmappingproject.net');
+  ga('send', 'pageview');
+
+</script> 
+
+    <title>No-Fault Evictions in San Francisco</title>
+    <link rel="stylesheet" href="css/jquery-ui.min.css">
+    <script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
+    <script src="http://libs.cartocdn.com/cartodb.js/v2/cartodb.js"></script>
+    <script src="js/jquery.ui.core.js"></script>
+    <script src="js/jquery.ui.widget.js"></script>
+    <script src="js/jquery.ui.mouse.js"></script>
+    <script src="js/jquery.ui.slider.js"></script>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+        <script src="js/new_ellis.js"NoFaultEvictions.js"></script>
+    
+<!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
+<![endif]-->
+
+ <link rel="stylesheet" href="css/styles.css">
+
+  </head>
+  <body>
+  <div id = "map"></div>
+
+
+   <div class="sidepanel">
+      <div class="wrapper">
+        <p></p>
+       
+        <h1 class="resize">No-Fault Evictions in San Francisco,<br> 1997 to 2013</h1>
+    <div id="timeContainer">
+         <div id = "timeline" class=".resize">
+      <div id="play" class="timeline-element"></div>
+       <div id="slider" class="timeline-element"></div> 
+
+        </div>
+
+         <span id="date" class=".resize"> </span> 
+       </div>
+           <h2>
+         <span id="ellisCount" style="color: #f30; font-size:36px;">0</span> evictions due to <span class="triggerPopup" id="ellis">THE ELLIS ACT</span>
+          <br> <span id="omiCount" style="color: #606; font-size:36px;">0</span> evictions due to  <span class="triggerPopup" id="omi">OWNER-MOVE-IN </span>
+          <br>  <span id="demoCount" style="color: #066; font-size:36px;">0</span> evictions due to <span class="triggerPopup" id="demo">DEMOLITION</span>
+          <br>  <span id="totalCount" style="color: #000; font-size:60px; " > 0</span> total no-fault evictions
+        </h2>
+
+       
+        <p></p>
+   
+        <p class=".resize"> <span style="font-weight: bold; font-size:15px">This map depicts all no-fault evictions</span> from 1997-2013 filed at the Rent Board, including Ellis Act Evictions, Owner-Move-In Evictions, and Demolition Evictions. It does not encapsulate the true level of displacement because buyouts, eviction threats, and rent increases that drive tenants with no rent protection out cumulatively do not show up on official city records. The number of renters evicted per unit is also unknown. Some people also self-evict either because they don’t understand their rights or do not want to fight even against an illegal eviction. These also do not appear here. We are collecting such information through our <a href="http://antievictionmappingproject.wordpress.com/survey/">survey here</a>. </p>
+
+        <p class=".resize">In 1998 the loopholes for owner-move-in (OMI) evictions were altered via a ballot measure. As our <a href="http://antievictionmappingproject.wordpress.com/no-fault-eviction-timeline/">timeline of no-fault evictions shows</a>, they had been wildly abused before that. Now only one owner is allowed  to move into a building and they must live there for three years before they can re-rent. A building that has evicted either a senior with ten plus years of tenancy and/or a disabled tenant can never become a condo. Due to public pressure, there is now a ten year waiting period for condo converstion if the <a href="http://www.antievictionmappingproject.net/ellis.html">Ellis Act</a> was used. Public pressure and local legislation can make a difference during speculative booms.</p>
+
+        <p>
+        <strong>Remember, as a tenant you have rights and should receive compensation if being evicted.</strong> Your landlord cannot simply declare, “You are evicted,” or, "I'm moving in." If you are served a notice, quickly seek help at a tenants organization, such as the <a href="http://www.sftu.org">San Francisco Tenants Union</a>, the <a href="http://www.hrcsf.org">Housing Rights Committee</a>, the <a href="http://www.thclinic.org">Tenderloin Housing Clinic</a>, <a href="http://www.cjjc.org/en/services/tenant-services">Causa Justa</a>, or the <a href="http://www.chinatowncdc.org/index.php?option=com_content&view=article&id=57&Itemid=67">Chinatown Community Development Center</a>. You can also join an eviction defense direct action group such as <a href="http://evictionfreesf.org">Eviction Free San Francisco</a>. </p>
+
+        <p><strong>If you want to get involved with the</strong> <a href="http://www.antievictionmappingproject.net"><strong>Anti-Eviction Mapping Project</strong></a>, <a href="mailto:antievictionmappingproject@gmail.com">email us</a> or follow us on <a href="https://www.facebook.com/AntiEvictionMappingProject">FaceBook</a> or <a href="https://twitter.com/antievictionmap">Twitter</a>. There are multiple ways that you can get involved. We will soon be holding a hackathon for community members to join us in mapping and researching. If you have been evicted or forced out by other means, please fill out <a href="http://antievictionmappingproject.wordpress.com/survey/">our survey here to put your story on a comprehensive map in the making</a>. </p>
+        
+        <p><strong>Notes on this map:</strong> The no-fault eviction data that we have used to compile this map comes from the San Francisco Rent Board and San Francisco Planning Department. You can scroll over each explosion to read the address and the number of units displaced.</p>
+
+
+        <div class="context footer">
+       
+          <p>Map created by <a href="http://antievictionmappingproject.wordpress.com/">Anti-Eviction Mapping Project</a></p>
+          <p>Powered by <a href="http://d3js.org/">D3</a>, <a href="http://leafletjs.com/">Leaflet</a> and <a href="http://cartodb.com/"> CartoDB</a></p>
+        </div>
+          
+     </div>
+      </div>
+    </div>
+    <div id="ellisPopup" class="popup">The Ellis Act is a key mechanism for undermining San Francisco’s rent control laws. The state law gives landlords to “go out of business” and evict tenants, and then form group-owned tenancy-in-common flats or condos.</div>
+    <div id="omiPopup" class="popup">OMI no-fault evictions allow landlords to evict tenants so that they or their relatives can move into single units. These evictions are at times abused by landlords who want to evict a tenant in order to raise the rent.</div>
+    <div id="demoPopup" class="popup">Demolition no-fault evictions allow landlord to demolish apartment buildings and then rebuild a new ones not covered by rent control.</div>
+ 
+   
+  </body>
+</html>
+
+
+
+<div class="context footer">
+       
+      <p>Map created by <a href="http://www.antievictionmappingproject.net">Anti-Eviction Mapping Project</a></p>
+          <p>Powered by <a href="http://d3js.org/">D3</a>, <a href="http://leafletjs.com/">Leaflet</a> and <a href="http://cartodb.com/"> CartoDB</a></p>
+        </div>
+          
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+
+   
+ 
+
+    </script>
+  </body>
+</html>

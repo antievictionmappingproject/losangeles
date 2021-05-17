@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html><head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+     <meta charset="utf-8">
+    <!--Edit the title of the page-->
+   <meta name="keywords" content="Ellis Act, Anti-Eviction Mapping Project, Los Angeles, Eviction, California, Gentrification
+"><meta name="description" content="Ellis Act Evictions in Los Angeles, California
+by the Anti-Eviction Mapping Project">
+     <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-46758541-1', 'antievictionmappingproject.net');
+  ga('send', 'pageview');
+
+</script>
+   
+    <meta name="description" content="Los Angeles Ellis Act Evictions from 2001 to 2020, by the Anti-Eviction Mapping project">
+    <meta name="author" content="Anti-Eviction Mapping Project">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
+    <!--[if lte IE 8]>
+      <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
+    <![endif]-->
+    <!--Switch between the different themes changing the stylesheet below - light-theme.css |dark-theme.css -->
+    <link rel="stylesheet" href="css/light-theme.css">
+    <link rel="stylesheet" href="css/makeitresponsive.css">
+    <title>Ellis Act Evictions, Los Angeles - Anti-Eviction Mapping Project</title>
+    <link rel="stylesheet" href="css/jquery-ui.min.css">
+    <script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
+    <script src="http://libs.cartocdn.com/cartodb.js/v2/cartodb.js"></script>
+    <script src="js/jquery.ui.core.js"></script>
+    <script src="js/jquery.ui.widget.js"></script>
+    <script src="js/jquery.ui.mouse.js"></script>
+    <script src="js/jquery.ui.slider.js"></script>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+    <script src="js/l_a.js"></script>
+<!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
+<![endif]-->
+
+
+  <style type="text/css">
+    html, body, #map {
+      position: relative;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
+    .toolbar {
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+      background-color: rgba(255, 255, 255, 0.8);
+      font: 30px "Helvetica Neue";
+
+      width: 100%;
+    }
+
+    #timeline{
+      margin-bottom: 40px;
+      width:100%;
+      float:left;
+    }
+
+    .timeline-element{
+      display:block;
+      float:left;
+     
+    }
+
+    #evictionCount{
+      font: 18px "Helvetica Neue";
+      height: 60px;
+      width: 400px;
+      display:block;
+      float:right;
+
+    }
+  
+    .tooltip{
+      color:#fff;
+      background-color:#000;
+      opacity:0.7;
+      padding-right: 10px;
+      padding-left: 10px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: +1px;
+    }
+   
+    path {
+      fill: #f00;
+      fill-opacity: .5;
+      stroke: #fff;
+      stroke-width: 1.5px;
+    }
+
+     #counter{
+      color:#000000;
+      font-family: "Helvetica Narrow","Arial Narrow",Tahoma,Arial,Helvetica;
+      letter-spacing: -1px;
+      
+    }
+
+    #play{
+    width:30px;
+    height:30px;
+    cursor:pointer;
+     vertical-align: middle;
+     background-image:url('images/pause.png');
+     
+    }
+
+    #slider{
+      width: 65%;
+      height: 14px;
+      top:8px;
+   z-index: 20;
+   margin-left:5px;
+   
+    }
+
+    circle {
+      fill: #f30;
+      stroke-width: 0.5px;
+      fill-opacity: 0.8;
+      stroke: #FFF;
+  }
+
+  .center {
+    stroke-width: 6px;
+    stroke-opacity: 0.3;
+    fill: #000;
+    stroke: #F30;
+  }
+ 
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div class="sidepanel">
+      <div class="wrapper">
+        <p>&nbsp;</p>
+<h2 style="color: #092DF5; font-size: 24px;">THE DESTRUCTION<br>
+OF LOS ANGELES<br>
+AFFORDABLE HOUSING<br>
+DUE TO THE<br></h2>
+
+        <h1>Ellis Act! </h1>
+        <p>&nbsp;</p>
+        <p>
+  
+<h3 id="runningTotal"><div id="counter" style="color: #ff3300; font-size:80px; opacity:0.9 " > 0</div><br>
+        NUMBER OF UNITS IN WHICH LANDLORDS/DEVELOPERS FILED ELLIS ACT DECLARATIONS TO EVICT TENANTS WITH THE CITY OF LOS ANGELES</h3>
+<h3>
+  <span id="date"> </span> </h3>
+      <div id="timeline">
+      <div id="play" class="timeline-element"></div>
+      <div id="slider" class="timeline-element"></div>
+       
+      </div>
+      <h2><span style="font-weight: bold; font-size:15px"></span><br>
+      </h2>
+      <p>Map created by the <a href="https://www.antievictionmap.com" target="new">Anti-Eviction Mapping Project</a> </p>
+      <p>In collaboration with  the <a href="http://www.cesinaction.org/" target="new">Coalition for Economic Survival</a>.</p>  
+              <p><a href="http://www.cesinaction.org"><img src="CES Logo Full color w blue text.jpg" width="340" height="249" alt=""/></a></p>
+       <p><a href="http://www.antievictionmap.com"><img src="bannersmall.jpg" width="340" height="136" alt="AEMP"/></a></p> 
+       
+        <p>The California Legislature adopted the Ellis Act in 1985 after the California Supreme Court ruled that landlords do not have the right to evict tenants to go out of the rental business. It was originally passed to protect small “mom and pop” landlords who could no longer tend to their rental property.</p>
+
+ <p>But, the intent of the Ellis Act has been corrupted by large developer who’s sole objective is to acquire rent control housing, destroy it, evict tenants and replace the existing housing with high-priced luxury housing. Studies have documented that much of the Ellis Act evictions are being done by developers who have owned the property less than a year.</p>
+
+ <p>The Ellis Act has resulted in the loss of tens of thousands of affordable rent control units, the gentrification of neighborhoods and the displacement of tenants throughout California.</p>
+
+ <p>There is a great need to build new affordable housing. At the same time we must preserve our existing affordable housing stock. Unless decision-makers understand that we need to do both, preserve and produce, we will be doomed to a failed housing policy and our crisis will get worse.</p>
+
+<p>The Ellis Act is one of the greatest impediments to addressing our affordable housing needs. The Ellis Act Must Go!</p>
+
+<p>In the City of Los Angeles, from 2001 through 2018, 24,000 rent control units were destroyed due to the Ellis Act. This has brought great hardship to low and moderate income tenants, seniors, disabled and working families. This has further exacerbated L.A.’s already existing affordable housing crisis.</p>
+
+ <p>The Los Angeles-based, tenants’ rights organization, <a href="http://www.cesinaction.org" target="new">Coalition for Economic Survival (CES)</a> has been organizing tenants to call for legislation to amend the Ellis Act and protect renters’ and their housing. CES, aided by the San Francisco-based <a href="https://www.antievictionmap.com" target="new">Anti-Eviction Mapping Project</a>, is presenting this map to visually show the devastating impact the Ellis Act has had on the City of Los Angeles. It is time that the Ellis Act is amended or eliminated!</p> 
+
+       
+<script id="infogram_0_d53aa72e-f7d3-4b32-8c56-4d1e9f8ef5ad" title="" src="//e.infogr.am/js/embed.js?RO1" type="text/javascript"></script>
+        
+        <div class="context footer">
+        
+ 
+       
+          <p>Map created by the <a href="https://www.antievictionmap.com" target="new">Anti-Eviction Mapping Project</a> and the <a href="http://www.cesinaction.org/" target="new">Coalition for Economic Survival</a>.
+<p>Powered by<a href="http://cartodb.com/"> CartoDB</a></p>
+        </div>
+          
+      </div>
+      </div>
+    </div>
+  </body>
+</html>

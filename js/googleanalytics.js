@@ -1,7 +1,3 @@
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
-
-ga('create', 'UA-46758541-1', 'antievictionmappingproject.net');
-ga('send', 'pageview');
+version https://git-lfs.github.com/spec/v1
+oid sha256:64e149813fdb2825e87dfce619bba7a8a9fdfd2df320340fa0421c40b45c5981
+size 407

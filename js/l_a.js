@@ -25,7 +25,7 @@ $( document ).ready(function() {
     minZoom: 9,
     zoom: 11
   })
-  .addLayer(new L.TileLayer("https://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png"));
+  .addLayer(new L.TileLayer("http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png"));
 
   /* Initialize the SVG layer */
   map._initPathRoot()    

@@ -8,7 +8,7 @@ $( document ).ready(function() {
   var colorExplodeStart = "red";
   var colorExplodeFinish = "#f40";
   var defaultZoom = 10;
-    var finalRadiusMultiplier = .5; //0.6
+    var finalRadiusMultiplier = .2; //0.6
   
   /*Tooltip showing address info*/
   var tooltip = d3.select("body")
@@ -21,9 +21,9 @@ $( document ).ready(function() {
 
   /*Initialize Leaflet Map*/
   var map = new L.Map("map", {
-  center: [37.7623504,-122.4099611],
-    minZoom: 10,
-    zoom: 13
+ center: [34.0953048,-118.265477],
+    minZoom: 9,
+    zoom: 11
   })
   .addLayer(new L.TileLayer("http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png"));
 

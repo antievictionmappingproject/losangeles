@@ -8,7 +8,7 @@ $( document ).ready(function() {
   var colorExplodeStart = "red";
   var colorExplodeFinish = "#f40";
   var defaultZoom = 10;
-    var finalRadiusMultiplier = .2; //0.6
+    var finalRadiusMultiplier = .5; //0.6
   
   /*Tooltip showing address info*/
   var tooltip = d3.select("body")
@@ -21,9 +21,9 @@ $( document ).ready(function() {
 
   /*Initialize Leaflet Map*/
   var map = new L.Map("map", {
-    center: [34.0953048,-118.265477],
-    minZoom: 9,
-    zoom: 11
+  center: [37.7623504,-122.4099611],
+    minZoom: 10,
+    zoom: 13
   })
   .addLayer(new L.TileLayer("http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png"));
 
@@ -44,35 +44,37 @@ $( document ).ready(function() {
   
   /*Load data file from cartoDB and initialize coordinates*/
   var sql = new cartodb.SQL({ user: 'ampitup', format: 'geojson'});
-  //sql.execute("SELECT the_geom, date, address, units, type, demo_count_at_date, ellis_count_at_date, omi_count_at_date, total_count_at_date FROM ellis_updated_2_13 WHERE date IS NOT NULL ORDER BY date ASC", {table_name: 'la_2015'})
-  sql.execute("SELECT the_geom, address, cartodb_id, date, units FROM {{table_name}} WHERE NOT(the_geom IS NULL OR date IS NULL OR units IS NULL) ORDER BY date ASC", {table_name: 'la_2020'})
-  .done(function(collection) {
+	
+sql.execute("SELECT the_geom, date, address, units FROM {{table_name}} WHERE the_geom IS NOT NULL ORDER BY date_filed ASC", {table_name: 'la_2020'})
+.done(function(collection) {
      var cumEvictions = 0;
-     startingTime =  Date.parse(collection.features[0].properties.date)-1000000;
-    maxTime =  Date.parse(collection.features[collection.features.length-1].properties.date)+4000000;
+     startingTime =  Date.parse(collection.features[0].properties.date_filed)-1000000;
+    maxTime =  Date.parse(collection.features[collection.features.length-1].properties.date_filed)+4000000;
       counterTime = startingTime;
         collection.features.forEach(function(d) {
           d.LatLng = new L.LatLng(d.geometry.coordinates[1],d.geometry.coordinates[0]);
            cumEvictions += d.properties.units;
       d.properties.totalEvictions = cumEvictions;
         });
+	  
 
         /*Add an svg group for each data point*/
         var node = g.selectAll(".node").data(collection.features).enter().append("g");
         var feature = node.append("circle")
         .attr("r", function(d) { return 1+d.properties.units;})
         .attr("class",  "center")
-	 .attr("r", function(d) { return (d.properties.units / 1.5 * finalRadiusMultiplier) + 4 ;})
+		.attr("r", function(d) { return (d.properties.units / 1.5 * finalRadiusMultiplier) + 4 ;})
         .style("stroke", function(d) { 
-         if(d.properties.type == "OMI"){
-          return "#606";} else if(d.properties.type == "DEMO"){
+         if(d.properties.type === "OMI"){
+          return "#606";} else if(d.properties.type === "DEMO"){
             return "#066";
           }
           return "#f30";
         });
+	
         /*show node info on mouseover*/
         node.on("mouseover", function(d){
-          var fullDate = d.properties.date;
+          var fullDate = d.properties.date_filed;
           var thisYear = new Date(fullDate).getFullYear();
           var currMonth = new Date(fullDate).getMonth()+1;
           var currDay = new Date(fullDate).getDate();
@@ -82,12 +84,12 @@ $( document ).ready(function() {
             unitText = units + " evictions"
           }
           var dateString = currMonth+"/"+currDay + "/"+thisYear;
-          $(".tooltip").html(d.properties.address+ "<br>"+unitText+"<br>"+dateString);
+          $(".tooltip").html(d.properties.address_1+"<br>"+d.properties.owner+"<br>"+unitText+"<br>"+dateString);
           return tooltip.style("visibility", "visible");})
         .on("mousemove", function(){return tooltip.style("top",
           (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
         .on("click", function(d){
-          tooltip.text(d.properties.address);
+          tooltip.text(d.properties.address_1+", "+d.properties.owner);
           return tooltip.style("visibility", "visible");})
         .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
 
@@ -109,7 +111,7 @@ $( document ).ready(function() {
       }
     });
 
-        /*Starting setup*/
+         /*Starting setup*/
         var currDate = new Date(counterTime).getFullYear();
         //stopAnimation();
         filterCurrentPoints();
@@ -117,16 +119,16 @@ $( document ).ready(function() {
         update();
         playAnimation();
 		
-        /*Filter map points by date*/
+         /*Filter map points by date*/
         function filterCurrentPoints(){
          var filtered = node.attr("visibility", "hidden")
-         .filter(function(d) { return Date.parse(d.properties.date) < counterTime}) 
+         .filter(function(d) { return Date.parse(d.properties.date_filed) < counterTime}) 
          .attr("visibility", "visible");
         // console.log(JSON.stringify(filtered[0]));
         // updateCounter(filtered[0].length-1);
          filtered.filter(function(d) { 
 
-        return Date.parse(d.properties.date) > counterTime-step}) 
+           return Date.parse(d.properties.date_filed) > counterTime-step}) 
       .append("circle")
           .attr("r", 8)
            .style("fill","red")
@@ -142,7 +144,7 @@ $( document ).ready(function() {
           updateCounter(filtered[0].length-1);
        }
 
-       /*Update map counters*/
+         /*Update map counters*/
        function updateCounter(index){
         var totalEvictions = 0;
         if(index<1){
@@ -156,10 +158,10 @@ $( document ).ready(function() {
           var currMonth = new Date(counterTime).getMonth()+1;
           var currDay = new Date(counterTime).getDate();
       
-          document.getElementById('date').innerHTML = "1/1/2001 - " + currMonth+"/"+currDay + "/"+currDate;
+          document.getElementById('date').innerHTML = "1/1/1994 - " + currMonth+"/"+currDay + "/"+currDate;
       
         }
-
+	
        /*Update slider*/
        function playAnimation(){
         counterTime = $( "#slider" ).slider( "value" );
@@ -178,13 +180,13 @@ $( document ).ready(function() {
 
       }
 
-     function stopAnimation(){
+        function stopAnimation(){
       clearInterval(timer);
       $('#play').css('background-image', 'url(images/play.png)');
       isPlaying = false;
     }
 
-    /*Scale dots when map size or zoom is changed*/
+  /*Scale dots when map size or zoom is changed*/
     function update() {
       var up = map.getZoom()/13;
       node.attr("transform", function(d) {return "translate(" +  map.latLngToLayerPoint(d.LatLng).x + "," + map.latLngToLayerPoint(d.LatLng).y + ") scale("+up+")"});
@@ -201,6 +203,7 @@ $( document ).ready(function() {
       }
     }
   })
+
 
 /*Show info about on mouseover*/
   $( ".popup" ).hide();
@@ -219,3 +222,6 @@ $( document ).ready(function() {
 
   $( ".triggerPopup" ).on("mouseout", function(){ $( ".popup" ).hide();});
 });
+
+
+

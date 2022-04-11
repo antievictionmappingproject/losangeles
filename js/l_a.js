@@ -1,5 +1,5 @@
 $( document ).ready(function() {
-
+	
   /* Initialize animation variables. These will be generated dynamically from the cartoDB data */
   var startingTime, startingDateString, maxTime, counterTime, step, timer;
   var animationDuration = 45; // in seconds
@@ -20,13 +20,15 @@ $( document ).ready(function() {
   .text("tooltip");
 
   /*Initialize Leaflet Map*/
+var layer = new L.StamenTileLayer("toner");
+var map = new L.Map("element_id", {
   var map = new L.Map("map", {
  center: [34.0953048,-118.265477],
     minZoom: 9,
     zoom: 11
-  })
-  .addLayer(new L.TileLayer("http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png"));
-
+});
+map.addLayer(layer);
+	
   /* Initialize the SVG layer */
   map._initPathRoot()    
 

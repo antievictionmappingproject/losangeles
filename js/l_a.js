@@ -19,9 +19,6 @@ $( document ).ready(function() {
   .style("visibility", "hidden")
   .text("tooltip");
 
-
-	<div id="map"></div>
-        <script type="text/javascript">
             // Initialize a map centered at (34.0953048,-118.265477) at zoom level 11
             var map = L.map('map').setView([34.0953048,-118.265477], 11);
 
@@ -30,7 +27,6 @@ $( document ).ready(function() {
                 maxZoom: 20,
                 attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/about" target="_blank">OpenStreetMap</a> contributors',
             }).addTo(map);
-        </script>
 	
   /* Initialize the SVG layer */
   map._initPathRoot()    

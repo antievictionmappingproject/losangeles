@@ -23,9 +23,12 @@ $( document ).ready(function() {
             var map = L.map('map').setView([34.0953048,-118.265477], 11);
 
             // Style URL format in XYZ PNG format; see our documentation for more options
-            L.tileLayer('https://a.tile.openstreetmap.org/${z}/${x}/${y}.png', {
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 20,
+		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
+
+	
 
 	
   /* Initialize the SVG layer */

@@ -19,15 +19,18 @@ $( document ).ready(function() {
   .style("visibility", "hidden")
   .text("tooltip");
 
-  /*Initialize Leaflet Map*/
-var layer = new L.StamenTileLayer("toner");
-var map = new L.Map("element_id", {
-  var map = new L.Map("map", {
- center: [34.0953048,-118.265477],
-    minZoom: 9,
-    zoom: 11
-});
-map.addLayer(layer);
+
+	<div id="map"></div>
+        <script type="text/javascript">
+            // Initialize a map centered at (34.0953048,-118.265477) at zoom level 11
+            var map = L.map('map').setView([34.0953048,-118.265477], 11);
+
+            // Style URL format in XYZ PNG format; see our documentation for more options
+            L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
+                maxZoom: 20,
+                attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/about" target="_blank">OpenStreetMap</a> contributors',
+            }).addTo(map);
+        </script>
 	
   /* Initialize the SVG layer */
   map._initPathRoot()    

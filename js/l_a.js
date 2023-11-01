@@ -26,6 +26,7 @@ $( document ).ready(function() {
             L.tileLayer('https://a.tile.openstreetmap.org/${z}/${x}/${y}.png', {
                 maxZoom: 20,
             }).addTo(map);
+
 	
   /* Initialize the SVG layer */
   map._initPathRoot()    

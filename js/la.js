@@ -1,7 +1,9 @@
 $(document).ready(function () {
 
   /* Initialize animation variables. These will be generated dynamically from the cartoDB data */
-  var startingTime, maxTime, counterTime, step, timer;
+  var startingTime, counterTime, step, timer;
+
+  var finalRadiusMultiplier = .5; //0.6
 
   /*Tooltip showing address info*/
   var tooltip = d3.select("body")
@@ -31,43 +33,67 @@ $(document).ready(function () {
   /*Animation Timing Variables*/
   var startingTime = 86166720000;
   var step = 1500000000;
-  var maxTime;
   var timer;
   var isPlaying = false;
   var counterTime = startingTime;
 
-  /*Load data file from cartoDB and initialize coordinates*/
-  var sql = new cartodb.SQL({ user: 'ampitup', format: 'geojson' });
+  fetch('https://raw.githubusercontent.com/antievictionmappingproject/losangeles/main/data/evictions.csv')
+    .then(response => {
+      return response.text()
+    }) // Read as text first
+    .then(text => {
+      return Papa.parse(text, { header: true, skipEmptyLines: true }).data;
+    })
+    .then(rawData => {
+      return rawData.toSorted((a, b) => Date.parse(a.date) - Date.parse(b.date));
+    })
+    .then(sortedData => {
+      return sortedData.filter((row) => row.lat && row.long)
+    })
+    .then(filteredData => {
+      return filteredData.map((record) => {
+        record.units = Number(record.units)
+        record.lat = Number(record.lat)
+        record.long = Number(record.long)
 
-  sql.execute("SELECT the_geom, date, address, units FROM {{table_name}} WHERE the_geom IS NOT NULL ORDER BY date ASC", { table_name: 'la_2020' })
-    .done(function (collection) {
+        return record
+      })
+    })
+    .then(evictionData => {
       var cumEvictions = 0;
-      startingTime = Date.parse(collection.features[0].properties.date) - 1000000;
-      maxTime = Date.parse(collection.features[collection.features.length - 1].properties.date) + 4000000;
+      startingTime = Date.parse(evictionData[0].date) - 1000000;
+      const maxTime = Date.parse(evictionData[evictionData.length - 1].date) + 4000000;
       counterTime = startingTime;
-      collection.features.forEach(function (d) {
-        d.LatLng = new L.LatLng(d.geometry.coordinates[1], d.geometry.coordinates[0]);
-        cumEvictions += d.properties.units;
-        d.properties.totalEvictions = cumEvictions;
+      evictionData.forEach(function (d) {
+        d.LatLng = new L.LatLng(d.lat, d.long);
+        cumEvictions += d.units;
+        d.totalEvictions = cumEvictions;
       });
 
 
       /*Add an svg group for each data point*/
-      var node = g.selectAll(".node").data(collection.features).enter().append("g");
+      var node = g.selectAll(".node").data(evictionData).enter().append("g");
+      var feature = node.append("circle")
+        .attr("r", function (d) { return 1 + d.units; })
+        .attr("class", "center")
+        .attr("r", function (d) { return (d.units / 1.5 * finalRadiusMultiplier) + 4; })
+        .style("stroke", function (d) {
+          return "#f30";
+        });
 
       /*show node info on mouseover*/
       node.on("mouseover", function (d) {
-        var fullDate = d.properties.date;
+        var fullDate = d.date;
         var thisYear = new Date(fullDate).getFullYear();
         var currMonth = new Date(fullDate).getMonth() + 1;
         var currDay = new Date(fullDate).getDate();
-        var units = d.properties.units;
+        var units = d.units;
         var unitText = units + " eviction";
         if (units > 1) {
           unitText = units + " evictions"
         }
         var dateString = currMonth + "/" + currDay + "/" + thisYear;
-        $(".tooltip").html(d.properties.address_1 + "<br>" + d.properties.owner + "<br>" + unitText + "<br>" + dateString);
+        $(".tooltip").html(d.address + "<br>" + unitText + "<br>" + dateString);
         return tooltip.style("visibility", "visible");
       })
         .on("mousemove", function () {
@@ -75,7 +101,7 @@ $(document).ready(function () {
             (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
         })
         .on("click", function (d) {
-          tooltip.text(d.properties.address_1 + ", " + d.properties.owner);
+          tooltip.text(d.address_1 + ", " + d.owner);
           return tooltip.style("visibility", "visible");
         })
         .on("mouseout", function () { return tooltip.style("visibility", "hidden"); });
@@ -83,7 +109,7 @@ $(document).ready(function () {
       /*Initialize play button and slider*/
       $("#play").click(togglePlay);
       $("#slider").slider({
-        max: maxTime, min: startingTime, value: maxTime, step: step, start: function () {
+        max: maxTime, min: startingTime, value: startingTime, step: step, start: function () {
           clearInterval(timer);
         }, change: function () {
           counterTime = $("#slider").slider("value");
@@ -110,12 +136,12 @@ $(document).ready(function () {
       /*Filter map points by date*/
       function filterCurrentPoints() {
         var filtered = node.attr("visibility", "hidden")
-          .filter(function (d) { return Date.parse(d.properties.date) < counterTime })
+          .filter(function (d) { return Date.parse(d.date) < counterTime })
           .attr("visibility", "visible");
         // console.log(JSON.stringify(filtered[0]));
         // updateCounter(filtered[0].length-1);
         filtered.filter(function (d) {
-          return Date.parse(d.properties.date) > counterTime - step
+          return Date.parse(d.date) > counterTime - step
         })
           .append("circle")
           .attr("r", 8)
@@ -125,7 +151,7 @@ $(document).ready(function () {
 
           .duration(800)
           .ease(Math.sqrt)
-          .attr("r", function (d) { return d.properties.units * 10; })
+          .attr("r", function (d) { return d.units * 10; })
           .style("fill", "#f40")
           .style("fill-opacity", 1e-6)
           .remove();
@@ -133,14 +159,8 @@ $(document).ready(function () {
       }
 
       /*Update map counters*/
-      function updateCounter(index) {
-        var totalEvictions = 0;
-        if (index < 1) {
-
-        } else {
-          var props = collection.features[index].properties;
-          totalEvictions = props.totalEvictions;
-        }
+      function updateCounter(latestEvictionIndex) {
+        const totalEvictions = latestEvictionIndex > 0 ? evictionData[latestEvictionIndex].totalEvictions : 0
         document.getElementById('counter').innerHTML = totalEvictions + " ";
         currDate = new Date(counterTime).getFullYear();
         var currMonth = new Date(counterTime).getMonth() + 1;
@@ -189,8 +209,7 @@ $(document).ready(function () {
           playAnimation();
         }
       }
-    })
-
+    }).catch(error => console.error("Error fetching data:", error));
 
   /*Show info about on mouseover*/
   $(".popup").hide();

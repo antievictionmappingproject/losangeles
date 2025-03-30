@@ -79,7 +79,7 @@ path {
     height: 30px;
     cursor: pointer;
     vertical-align: middle;
-    background-image: url('images/pause.png');
+    background-image: url('../images/pause.png');
 
 }
 
